@@ -5,9 +5,9 @@ module.exports = function(sequelize, DataTypes) {
     spec: DataTypes.STRING
   });
 
-  // Equipment.associate = models=>{
-  //   Equipment.belongsToMany(models.User, {through: 'UserEquipment'})
-  // }
+  Equipment.associate = models=>{
+    Equipment.belongsToMany(models.User, {through: models.UserEquipment})
+  }
 
   return Equipment;
 };

@@ -2,39 +2,37 @@ var express = require('express')
 var router = express.Router()
 const models = require('../models')
 
-router.get('/')
+router.get('/', (req, res)=>{
+  models.Equipment.findAll()
+    .then(equipments=>{
+      let promise = equipments.map(equipment=>{
+        return new Promise((resolve, reject)=>{
+          equipment.getUsers()
+            .then(users=>{
+              equipment['users'] = users
+              resolve(equipment)
+            })
+            .catch(err=>{
+              reject(err)
+            })
+        })
+      })
+      Promise.all(promise)
+        .then(equipments=>{
+          res.render('equipment', {equip:equipments, title:'All Data Equipments'})
+        })
+        .catch(err=>{
+          res.send(err)
+        })
+    })
+    .catch(err=>{
+      res.send(err)
+    })
+})
 
 // router.get('/', (req, res)=>{
-//   models.Equipment.findAll()
-//     .then(equipments=>{
-//       let promise = equipments.map(equipment=>{
-//         return new Promise((resolve, reject)=>{
-//           equipment.getUsers()
-//             .then(users=>{
-//               equipment['users'] = users
-//               resolve(equipment)
-//             })
-//             .catch(err=>{
-//               reject(err)
-//             })
-//         })
-//       })
-//       Promise.all(promise)
-//         .then(equipments=>{
-//           res.render('equipments', {equip:equipments, title:'All Data Equipments'})
-//         })
-//         .catch(err=>{
-//           res.send(err)
-//         })
-//     })
-//     .catch(err=>{
-//       res.send(err)
-//     })
+//   res.send('equiment')
 // })
-
-router.get('/', (req, res)=>{
-  res.send('equiment')
-})
 
 router.get('/add', (req, res)=>{
   res.render('addEquipment', {title:'Add Equipment'})

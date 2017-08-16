@@ -7,10 +7,10 @@ module.exports = function(sequelize, DataTypes) {
     Qty: DataTypes.INTEGER
   });
 
-  // UserEquipment.associate = models=>{
-  //   UserEquipment.belongsTo(models.User)
-  //   UserEquipment.belongsTo(models.Equiment)
-  // }
+  UserEquipment.associate = models=>{
+    UserEquipment.belongsTo(models.User)
+    UserEquipment.belongsTo(models.Equipment)
+  }
 
   return UserEquipment;
 };
